@@ -78,6 +78,19 @@ async def echo(update, context):
         await context.bot.edit_message_text(chat_id=update.effective_chat.id, text=response,
                                             message_id=answer.id)
     except Exception as err:
+        chat_gpt.reset_history(update.effective_chat.id)
+        await context.bot.edit_message_text(chat_id=update.effective_chat.id,
+                                            text="Извините, возникла проблема при формировании ответа",
+                                            message_id=answer.id)
+        log.error(err)
+
+
+async def reset(update, context):
+    try:
+        chat_gpt.reset_history(update.effective_chat.id)
+        answer = await context.bot.send_message(chat_id=update.effective_chat.id, text="История сброшена",
+                                                reply_to_message_id=update.effective_message.id)
+    except Exception as err:
         await context.bot.edit_message_text(chat_id=update.effective_chat.id,
                                             text="Извините, возникла проблема при формировании ответа",
                                             message_id=answer.id)
@@ -97,6 +110,7 @@ class TelegramBot:
             self.application.add_handler(CommandHandler("start", start))
             self.application.add_handler(CommandHandler("translate", translate))
             self.application.add_handler(CommandHandler("paint", paint))
+            self.application.add_handler(CommandHandler("reset", reset))
             self.application.add_handler(MessageHandler(filters.TEXT, echo))
         except Exception as err:
             log.error(err)

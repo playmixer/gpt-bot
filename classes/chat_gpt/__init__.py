@@ -75,3 +75,6 @@ class ChatGPT:
 
         chat_response = ' '.join(m.text.strip() for m in completion.choices)
         return chat_response
+
+    def reset_history(self, id):
+        self.user_messages[id] = list()
