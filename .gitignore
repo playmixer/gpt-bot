@@ -1,0 +1,9 @@
+.idea
+env
+env_discord
+
+**/__pycache__
+logs
+
+**dev.**
+.env
