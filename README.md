@@ -26,7 +26,7 @@ TELEGRAM_BOT_API_KEY=<your_bot_token>
 4. Запустите `docker-compose`:
 
 ```bash
-docker-compose up --build -d
+docker-compose up --build -d telegram_bot
 ```
 
 Теперь вы можете перейти в телеграм и отправлять сообщения боту.
