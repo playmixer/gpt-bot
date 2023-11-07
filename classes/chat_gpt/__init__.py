@@ -1,5 +1,8 @@
 import openai
 from enum import Enum
+# from classes.logger import logger
+
+# log = logger(prefix="telegram_")
 
 
 class Logger:
@@ -9,10 +12,14 @@ class Logger:
     def error(self, text: str):
         pass
 
+    def debug(self, text: str):
+        pass
+
 
 class GPTModels(Enum):
-    GPT3_5TURBO = 'gpt-3.5-turbo'
-    ADA = 'ada'
+    GPT4_TURBO = "gpt-4-1106-preview"
+    GPT3_5TURBO = "gpt-3.5-turbo"
+    ADA = "ada"
 
 
 class ChatGPT:
@@ -20,6 +27,7 @@ class ChatGPT:
     user_messages = dict()
     log = None
     MODELS = GPTModels
+    model: GPTModels = None
 
     def __init__(self, api_key, log: Logger = None):
         self.ai = openai
@@ -38,11 +46,13 @@ class ChatGPT:
         else:
             print(text)
 
-    def chat(self, model=MODELS.GPT3_5TURBO, *args, **kwargs) -> str:
-        if model == self.MODELS.ADA:
-            return self.input_ada(*args, **kwargs)
-        else:
-            return self.input_gpt35turbo(*args, **kwargs)
+    def chat(self, model=MODELS.GPT4_TURBO, *args, **kwargs) -> str:
+        # self.log.debug(model)
+        # self.model = model
+        # if model == self.MODELS.ADA:
+        #     return self.input_ada(*args, **kwargs)
+        # else:
+        return self.input_gpt35turbo(*args, **kwargs)
 
     def input_gpt35turbo(self, id: int, text: str) -> str:
         if self.user_messages.get(id) is None:
@@ -51,8 +61,9 @@ class ChatGPT:
         self.user_messages[id].append({"role": "user", "content": text})
         self.user_messages[id] = self.user_messages[id][-20:]
 
+        self.log.debug(self.user_messages)
         completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-1106-preview",
             messages=self.user_messages[id],
         )
         self._info(f"completion: {completion}")

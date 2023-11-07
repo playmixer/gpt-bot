@@ -72,7 +72,7 @@ async def echo(update, context):
         await context.bot.send_chat_action(chat_id=update.effective_chat.id,
                                            action=telegram.constants.ChatAction.TYPING, pool_timeout=100)
 
-        response = chat_gpt.chat(id=id, text=text, model=chat_gpt.MODELS.GPT3_5TURBO)
+        response = chat_gpt.chat(id=id, text=text)
         log.info(f"{id} A: {response}")
 
         await context.bot.edit_message_text(chat_id=update.effective_chat.id, text=response,
